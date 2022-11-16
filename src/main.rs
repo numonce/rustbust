@@ -7,7 +7,7 @@ use tokio::sync::Semaphore;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app = Command::new("RustBust")
         .author("numonce")
-        .version("1.0.1")
+        .version("1.0.2")
         .about("A simple dirb clone in Async Rust!")
         .arg(
             Arg::new("wordlist")
@@ -30,8 +30,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let cli = reqwest::Client::builder()
         .timeout(std::time::Duration::from_millis(5000))
         .build()?;
-    let urlbuff = app.get_one::<String>("url");
-    let wordfile = std::fs::File::open(app.get_one::<String>("wordlist"));
+    let urlbuff = app.get_one::<String>("url").unwrap();
+    let wordfile = std::fs::File::open(app.get_one::<String>("wordlist").unwrap());
     let reader = std::io::BufReader::new(wordfile.unwrap());
     let semaphore = Arc::new(Semaphore::new(120));
     let tasks: Vec<_> = reader
