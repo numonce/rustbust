@@ -31,8 +31,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .timeout(std::time::Duration::from_millis(5000))
         .build()?;
     let urlbuff = app.get_one::<String>("url").unwrap();
-    let wordfile = std::fs::File::open(app.get_one::<String>("wordlist").unwrap());
-    let reader = std::io::BufReader::new(wordfile.unwrap());
+    let wordfile = std::fs::File::open(app.get_one::<String>("wordlist").unwrap())?;
+    let reader = std::io::BufReader::new(wordfile);
     let semaphore = Arc::new(Semaphore::new(120));
     let tasks: Vec<_> = reader
         .lines()
